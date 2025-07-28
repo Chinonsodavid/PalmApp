@@ -1,9 +1,28 @@
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const handleLogin = () => {
+    if (!email || !validateEmail(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+    setEmailError('');
+    navigation.replace('Home');
+  };
+
   return (
     <View style={styles.container}>
-      {/* Title with shadow effect */}
+      {/* Title */}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>PALM</Text>
       </View>
@@ -11,15 +30,24 @@ export default function LoginScreen({ navigation }) {
       {/* Input Fields */}
       <View style={styles.inputGroup}>
         <TextInput
-          placeholder="Email or Phone Number"
+          placeholder="Email"
           placeholderTextColor="#ccc"
           keyboardType="email-address"
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            if (emailError) setEmailError('');
+          }}
           style={styles.input}
         />
+        {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
         <TextInput
           placeholder="Password"
           placeholderTextColor="#ccc"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
           style={styles.input}
         />
       </View>
@@ -30,10 +58,7 @@ export default function LoginScreen({ navigation }) {
       </TouchableOpacity>
 
       {/* Log In Button */}
-      <TouchableOpacity
-        onPress={() => navigation.replace('Home')}
-        style={styles.loginButton}
-      >
+      <TouchableOpacity onPress={handleLogin} style={styles.loginButton}>
         <Text style={styles.loginText}>Log In</Text>
       </TouchableOpacity>
 
@@ -70,7 +95,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     zIndex: 1,
   },
-
   inputGroup: {
     marginBottom: 24,
   },
@@ -81,7 +105,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     borderRadius: 20,
-    marginBottom: 20,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: '#ff6b6b',
+    fontSize: 14,
+    marginBottom: 10,
+    marginLeft: 10,
   },
   forgotButton: {
     marginBottom: 32,

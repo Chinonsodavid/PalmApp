@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export default function LoadingScreen({ navigation }) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Login');
+      navigation.replace('Welcome');
     }, 2000);
     return () => clearTimeout(timer);
   }, []);

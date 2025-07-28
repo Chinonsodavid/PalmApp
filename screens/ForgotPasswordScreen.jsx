@@ -1,6 +1,23 @@
+import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function ForgotPasswordScreen({ navigation }) {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
+  const handleReset = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    // TODO: Add real reset logic here
+    setError('');
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Reset Password</Text>
@@ -12,16 +29,16 @@ export default function ForgotPasswordScreen({ navigation }) {
         placeholder="Email Address"
         placeholderTextColor="#ccc"
         keyboardType="email-address"
+        value={email}
+        onChangeText={(text) => {
+          setEmail(text);
+          if (error) setError('');
+        }}
         style={styles.input}
       />
+      {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-      <TouchableOpacity
-        onPress={() => {
-          // Add password reset logic here
-          navigation.goBack();
-        }}
-        style={styles.resetButton}
-      >
+      <TouchableOpacity onPress={handleReset} style={styles.resetButton}>
         <Text style={styles.resetText}>Send Reset Link</Text>
       </TouchableOpacity>
 
@@ -57,7 +74,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     borderRadius: 20,
-    marginBottom: 24,
+    marginBottom: 10,
+  },
+  errorText: {
+    color: '#ff6b6b',
+    fontSize: 14,
+    marginBottom: 20,
+    marginLeft: 10,
   },
   resetButton: {
     backgroundColor: '#247c6d',
