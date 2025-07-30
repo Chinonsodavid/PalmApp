@@ -13,7 +13,7 @@ export default function OnboardingFrequencyScreen({ navigation }) {
   const handleSelection = async (frequency) => {
     try {
       await AsyncStorage.setItem('frequency', frequency);
-      navigation.navigate('NextScreen'); // replace with actual next screen
+      navigation.navigate('OnboardingTrigger'); // replace with actual next screen
     } catch (error) {
       console.error('Error saving frequency:', error);
     }

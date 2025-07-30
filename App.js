@@ -5,6 +5,8 @@ import LoadingScreen from './screens/LoadingScreen';
 import WelcomeScreen from './screens/WelcomeScreen';
 import WhoForScreen from './screens/onboarding/WhoForScreen';
 import OnboardingFrequencyScreen from './screens/onboarding/OnboardingFrequencyScreen'; 
+import OnboardingTriggerScreen from './screens/onboarding/OnboardingTriggerScreen';
+import AllSetScreen from './screens/onboarding/AllSetScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -23,6 +25,8 @@ export default function App() {
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="WhoFor" component={WhoForScreen} />
         <Stack.Screen name="OnboardingFrequency" component={OnboardingFrequencyScreen} />
+        <Stack.Screen name="OnboardingTrigger" component={OnboardingTriggerScreen} />
+        <Stack.Screen name="AllSet" component={AllSetScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />

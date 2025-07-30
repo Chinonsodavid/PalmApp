@@ -17,7 +17,7 @@ export default function LoginScreen({ navigation }) {
       return;
     }
     setEmailError('');
-    navigation.replace('Home');
+    navigation.replace('Welcome'); // replace with actual next screen
   };
 
   return (
