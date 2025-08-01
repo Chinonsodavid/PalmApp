@@ -15,7 +15,7 @@ export default function AppNavigator() {
         tabBarStyle: {
           backgroundColor: '#031c26',
           borderTopWidth: 0,
-          paddingTop: 8,
+          paddingTop: 0,
         },
         tabBarIcon: ({ focused, color }) => {
           let iconName;
