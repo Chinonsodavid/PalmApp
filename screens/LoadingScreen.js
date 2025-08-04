@@ -5,7 +5,7 @@ import LottieView from 'lottie-react-native';
 export default function LoadingScreen({ navigation }) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('App'); // Navigate to Login after loading
+      navigation.replace('Journal'); // Navigate to Login after loading
     }, 2000);
     return () => clearTimeout(timer);
   }, []);

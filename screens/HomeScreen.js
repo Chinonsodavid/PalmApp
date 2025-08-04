@@ -1,4 +1,5 @@
-import { View, Text, ScrollView, StyleSheet, Dimensions, Pressable } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, Pressable, TextInput } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import LottieView from 'lottie-react-native';
 import Animated, { FadeInUp, FadeInLeft, FadeInRight } from 'react-native-reanimated';
@@ -17,6 +18,8 @@ export default function HomeScreen() {
 
   const [allDoneAt, setAllDoneAt] = useState(null);
   const [countdown, setCountdown] = useState('');
+  const [note, setNote] = useState('');
+
 
   const allDone = tasks.every((task) => task.done);
 
@@ -58,6 +61,32 @@ export default function HomeScreen() {
     );
     setTasks(updated);
   };
+
+
+  const handleSaveNote = async () => {
+    if (!note.trim()) return;
+
+    try {
+      const existing = await AsyncStorage.getItem('journalNotes');
+      const parsed = existing ? JSON.parse(existing) : [];
+
+      const newEntry = {
+        text: note.trim(),
+        timestamp: new Date().toISOString(),
+      };
+
+      await AsyncStorage.setItem(
+        'journalNotes',
+        JSON.stringify([newEntry, ...parsed])
+      );
+
+      setNote('');
+      alert('Note saved to Journal!');
+    } catch (e) {
+      console.error('Saving note failed', e);
+    }
+  };
+
 
   return (
     <View style={styles.safeArea}>
@@ -121,7 +150,27 @@ export default function HomeScreen() {
               <Text style={styles.cardSubSmall}>Take 3 deep breaths and use Palm.</Text>
             </Animated.View>
           </View>
+
+          <View style={styles.journalBox}>
+            <Text style={styles.journalLabel}>How do you feel today?</Text>
+            <TextInput
+              placeholder="Write a quick note..."
+              placeholderTextColor="#aaa"
+              value={note}
+              onChangeText={setNote}
+              style={styles.journalInput}
+              multiline
+            />
+            <Pressable style={styles.journalButton} onPress={handleSaveNote}>
+              <Text style={styles.journalButtonText}>Save to Journal</Text>
+            </Pressable>
+          </View>
+
         </View>
+
+
+
+
       </ScrollView>
     </View>
 
@@ -163,7 +212,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: '#4ecdc4',
-    borderRadius: 15,
+    borderRadius: 10,
     padding: 20,
   },
   taskRow: {
@@ -208,7 +257,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-    marginTop: 30,
+    marginTop: 20,
   },
   squareCard: {
     backgroundColor: '#3b3f40',
@@ -217,10 +266,7 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'space-between',
     borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+
   },
   squareCardAlt: {
     backgroundColor: '#1d2b33',
@@ -229,10 +275,6 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'space-between',
     borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
   },
   cardTitle: {
     color: '#fff',
@@ -244,4 +286,39 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginTop: 4,
   },
+
+  journalBox: {
+    backgroundColor: '#11363f',
+    padding: 18,
+    borderRadius: 16,
+    marginTop: 20
+
+  },
+  journalLabel: {
+    color: '#fff',
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  journalInput: {
+    backgroundColor: '#1f4b56',
+    color: '#fff',
+    borderRadius: 10,
+    padding: 12,
+    minHeight: 60,
+    textAlignVertical: 'top',
+    fontSize: 15,
+  },
+  journalButton: {
+    backgroundColor: '#4ecdc4',
+    marginTop: 10,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  journalButtonText: {
+    color: '#03363d',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
 });

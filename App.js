@@ -15,6 +15,7 @@ import ReminderScreen from './screens/ReminderScreen';
 import StreakScreen from './screens/StreakScreen';
 import SettingsScreen from './screens/SettingsScreen';
 import AppNavigator from './screens/AppNavigator';
+import JournalScreen from './screens/JournalScreen';
 import { StatusBar } from 'expo-status-bar';
 import './global.css';
 
@@ -39,6 +40,8 @@ export default function App() {
         <Stack.Screen name="PasswordReset" component={ForgotPasswordScreen} />
         {/* SCREEN */}
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Journal" component={JournalScreen} />
+        {/* OTHER SCREENS */}
         <Stack.Screen name="Reminder" component={ReminderScreen} />
         <Stack.Screen name="Streak" component={StreakScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
