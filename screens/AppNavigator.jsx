@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './HomeScreen';
 import ReminderScreen from './ReminderScreen';
-import StreakScreen from './StreakScreen';
+import JournalScreen from './JournalScreen'; // ✅ import your new Journal page
 import SettingsScreen from './SettingsScreen';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -26,8 +26,8 @@ export default function AppNavigator() {
             case 'Reminder':
               iconName = focused ? 'notifications' : 'notifications-outline';
               break;
-            case 'Streak':
-              iconName = focused ? 'flame' : 'flame-outline';
+            case 'Journal':
+              iconName = focused ? 'book' : 'book-outline'; 
               break;
             case 'Settings':
               iconName = focused ? 'settings' : 'settings-outline';
@@ -41,7 +41,7 @@ export default function AppNavigator() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Reminder" component={ReminderScreen} />
-      <Tab.Screen name="Streak" component={StreakScreen} />
+      <Tab.Screen name="Journal" component={JournalScreen} /> 
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );

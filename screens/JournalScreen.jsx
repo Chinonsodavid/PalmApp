@@ -10,14 +10,19 @@ export default function JournalScreen() {
     useCallback(() => {
       const loadEntries = async () => {
         try {
-          const json = await AsyncStorage.getItem('journalEntries');
+          const json = await AsyncStorage.getItem('journalNotes'); // ⬅️ CHANGED TO MATCH YOUR SAVE KEY
           const parsed = json ? JSON.parse(json) : [];
-          const sorted = parsed.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+          const sorted = Array.isArray(parsed)
+            ? parsed.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            : [];
+
           setEntries(sorted);
         } catch (e) {
           console.error('Failed to load journal entries:', e);
         }
       };
+
       loadEntries();
     }, [])
   );
@@ -25,12 +30,17 @@ export default function JournalScreen() {
   const renderItem = ({ item }) => {
     const date = new Date(item.timestamp);
     const formattedDate = date.toLocaleDateString();
-    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const formattedTime = date.toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
 
     return (
       <View style={styles.card}>
         <Text style={styles.entryText}>{item.text}</Text>
-        <Text style={styles.timestamp}>{formattedDate} • {formattedTime}</Text>
+        <Text style={styles.timestamp}>
+          {formattedDate} • {formattedTime}
+        </Text>
       </View>
     );
   };
@@ -40,7 +50,7 @@ export default function JournalScreen() {
       <Text style={styles.title}>📔 Your Journal</Text>
 
       {entries.length === 0 ? (
-        <Text style={styles.empty}>No entries yet. Write a quick note on the home page!</Text>
+        <Text style={styles.empty}>No entries yet. Write a quick note on the Home page!</Text>
       ) : (
         <FlatList
           data={entries}
