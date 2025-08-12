@@ -6,6 +6,7 @@ import Animated, { FadeInUp, FadeInLeft, FadeInRight } from 'react-native-reanim
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const { width } = Dimensions.get('window');
 
@@ -19,7 +20,6 @@ export default function HomeScreen() {
   const [allDoneAt, setAllDoneAt] = useState(null);
   const [countdown, setCountdown] = useState('');
   const [note, setNote] = useState('');
-
 
   const allDone = tasks.every((task) => task.done);
 
@@ -62,7 +62,6 @@ export default function HomeScreen() {
     setTasks(updated);
   };
 
-
   const handleSaveNote = async () => {
     if (!note.trim()) return;
 
@@ -87,234 +86,274 @@ export default function HomeScreen() {
     }
   };
 
-
   return (
-    <View style={styles.safeArea}>
-      <StatusBar style="light" backgroundColor="#05252f" translucent={false} />
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar style="light" backgroundColor="#0a1f2b" translucent={false} />
 
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Top Lottie Animation */}
-        <View style={styles.lottieWrapper}>
+        {/* Header Animation */}
+        <LinearGradient
+          colors={['#0a1f2b', '#1a3c4a']}
+          style={styles.headerWrapper}
+        >
           <LottieView
             source={require('../assets/animations/wave.json')}
             autoPlay
             loop
             style={styles.lottie}
           />
-        </View>
+        </LinearGradient>
 
-        {/* Content below Lottie gets padding */}
-        <View style={{ paddingHorizontal: 20, paddingTop: 40 }}>
-          <View style={styles.section}>
-            <Text style={styles.dailyText}>Daily Tasks</Text>
-
-            <Animated.View entering={FadeInUp.delay(200).duration(500)} style={styles.card}>
+        {/* Main Content */}
+        <View style={styles.contentWrapper}>
+          <Animated.View entering={FadeInUp.delay(100).duration(600)} style={styles.section}>
+            <Text style={styles.sectionTitle}>Daily Tasks</Text>
+            <LinearGradient
+              colors={['#4ecdc4', '#2a9d8f']}
+              style={styles.taskCard}
+            >
               {!allDone ? (
                 tasks.map((task) => (
-                  <View key={task.id} style={styles.taskRow}>
+                  <Animated.View
+                    key={task.id}
+                    entering={FadeInLeft.delay(task.id * 100).duration(400)}
+                    style={styles.taskRow}
+                  >
                     <Text style={[styles.taskText, task.done && styles.taskTextDone]}>
-                      {task.id === 1 && '✋'} {task.id === 2 && '🧘‍♂️'} {task.id === 3 && '💧'} {task.text}
+                      {task.id === 1 && '✋ '}
+                      {task.id === 2 && '🧘‍♂️ '}
+                      {task.id === 3 && '💧 '}
+                      {task.text}
                     </Text>
-                    <Pressable onPress={() => toggleTask(task.id)}>
+                    <Pressable onPress={() => toggleTask(task.id)} style={styles.taskButton}>
                       <Ionicons
                         name={task.done ? 'checkmark-circle' : 'ellipse-outline'}
                         size={28}
-                        color={task.done ? '#2f9252' : '#ccc'}
+                        color={task.done ? '#ffffff' : '#cccccc'}
                       />
                     </Pressable>
-                  </View>
+                  </Animated.View>
                 ))
               ) : (
                 <View style={styles.celebrationBox}>
                   <LottieView
                     source={require('../assets/animations/taskdone.json')}
                     autoPlay
-                    loop
+                    loop={false}
                     style={styles.celebration}
                   />
-                  <Text style={styles.doneText}>Next tasks available in</Text>
-                  <Text style={styles.countdown}>{countdown}</Text>
+                  <Text style={styles.doneText}>Well Done!</Text>
+                  <Text style={styles.countdown}>Next tasks in {countdown}</Text>
                 </View>
               )}
-            </Animated.View>
-          </View>
+            </LinearGradient>
+          </Animated.View>
 
           <View style={styles.row}>
-            <Animated.View entering={FadeInLeft.delay(300).duration(500)} style={styles.squareCard}>
+            <Animated.View entering={FadeInLeft.delay(200).duration(500)} style={styles.squareCard}>
+              <LinearGradient
+                colors={['#3b3f40', '#2c2f30']}
+                style={StyleSheet.absoluteFill}
+              />
               <Text style={styles.cardTitle}>⏰ Reminder</Text>
-              <Text style={styles.cardSubSmall}>Set a new reminder.</Text>
+              <Text style={styles.cardSubtitle}>Set a new reminder to stay on track.</Text>
             </Animated.View>
 
-            <Animated.View entering={FadeInRight.delay(400).duration(500)} style={styles.squareCardAlt}>
-              <Text style={styles.cardTitle}>🌱 Tip</Text>
-              <Text style={styles.cardSubSmall}>Take 3 deep breaths and use Palm.</Text>
+            <Animated.View entering={FadeInRight.delay(300).duration(500)} style={styles.squareCard}>
+              <LinearGradient
+                colors={['#1d2b33', '#0f1a20']}
+                style={StyleSheet.absoluteFill}
+              />
+              <Text style={styles.cardTitle}>🌱 Daily Tip</Text>
+              <Text style={styles.cardSubtitle}>Take 3 deep breaths and relax with Palm.</Text>
             </Animated.View>
           </View>
 
-          <View style={styles.journalBox}>
+          <Animated.View entering={FadeInUp.delay(400).duration(600)} style={styles.journalBox}>
+            <LinearGradient
+              colors={['#11363f', '#0a252d']}
+              style={StyleSheet.absoluteFill}
+            />
             <Text style={styles.journalLabel}>How do you feel today?</Text>
             <TextInput
               placeholder="Write a quick note..."
-              placeholderTextColor="#aaa"
+              placeholderTextColor="#aaaaaa"
               value={note}
               onChangeText={setNote}
               style={styles.journalInput}
               multiline
             />
             <Pressable style={styles.journalButton} onPress={handleSaveNote}>
+              <LinearGradient
+                colors={['#4ecdc4', '#2a9d8f']}
+                style={StyleSheet.absoluteFill}
+              />
               <Text style={styles.journalButtonText}>Save to Journal</Text>
             </Pressable>
-          </View>
-
+          </Animated.View>
         </View>
       </ScrollView>
-    </View>
-
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#031c26',
+    backgroundColor: '#0a1f2b',
   },
   container: {
-    paddingBottom: 40,
+    paddingBottom: 60,
   },
-  lottieWrapper: {
+  headerWrapper: {
     width: '100%',
-    backgroundColor: '#05252f',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
     paddingTop: 70,
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
   lottie: {
     width: '100%',
-    height: 220,
+    height: 200,
+  },
+  contentWrapper: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   section: {
-    marginTop: 60,
-    marginBottom: 30,
+    // marginBottom: 30,
   },
-  dailyText: {
-    color: 'white',
-    fontSize: 30,
-    fontWeight: '300',
+  sectionTitle: {
+    color: '#ffffff',
+    fontSize: 32,
+    fontWeight: '700',
     marginBottom: 15,
-    letterSpacing: 2,
+    letterSpacing: 1.5,
   },
-  card: {
-    backgroundColor: '#4ecdc4',
-    borderRadius: 10,
+  taskCard: {
+    borderRadius: 16,
     padding: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
   taskRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderBottomColor: '#eee',
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    paddingVertical: 14,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
   },
   taskText: {
     flex: 1,
-    color: '#333',
+    color: '#ffffff',
     fontSize: 18,
     fontWeight: '500',
     marginLeft: 10,
   },
   taskTextDone: {
-    color: '#bbb',
+    color: '#aaaaaa',
     textDecorationLine: 'line-through',
+  },
+  taskButton: {
+    padding: 8,
   },
   celebrationBox: {
     alignItems: 'center',
+    paddingVertical: 20,
   },
   celebration: {
-    width: 190,
-    height: 190,
+    width: 200,
+    height: 200,
   },
   doneText: {
-    fontSize: 25,
-    color: 'black',
-    fontWeight: 'normal',
-    letterSpacing: 1,
+    fontSize: 24,
+    color: '#ffffff',
+    fontWeight: '600',
+    marginTop: 10,
   },
   countdown: {
-    fontSize: 25,
-    color: '#f7f7f7',
-    fontWeight: 'normal',
-    marginTop: 4,
+    fontSize: 20,
+    color: '#ffffff',
+    fontWeight: '400',
+    marginTop: 8,
+    letterSpacing: 1,
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 20,
-    marginTop: 20,
   },
   squareCard: {
-    backgroundColor: '#3b3f40',
     width: '48%',
     aspectRatio: 1,
-    padding: 16,
-    justifyContent: 'space-between',
-    borderRadius: 12,
-
-  },
-  squareCardAlt: {
-    backgroundColor: '#1d2b33',
-    width: '48%',
-    aspectRatio: 1,
-    padding: 16,
-    justifyContent: 'space-between',
-    borderRadius: 12,
+    padding: 20,
+    borderRadius: 16,
+    overflow: 'hidden',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
   cardTitle: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '600',
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 8,
   },
-  cardSubSmall: {
-    color: '#eee',
-    fontSize: 13,
-    marginTop: 4,
+  cardSubtitle: {
+    color: '#dddddd',
+    fontSize: 14,
+    lineHeight: 20,
   },
-
   journalBox: {
-    backgroundColor: '#11363f',
-    padding: 18,
+    padding: 20,
     borderRadius: 16,
-    marginTop: 20
-
+    overflow: 'hidden',
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
   journalLabel: {
-    color: '#fff',
-    fontSize: 16,
-    marginBottom: 10,
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 12,
   },
   journalInput: {
-    backgroundColor: '#1f4b56',
-    color: '#fff',
-    borderRadius: 10,
-    padding: 12,
-    minHeight: 60,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    color: '#ffffff',
+    borderRadius: 12,
+    padding: 14,
+    minHeight: 80,
     textAlignVertical: 'top',
-    fontSize: 15,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   journalButton: {
-    backgroundColor: '#4ecdc4',
-    marginTop: 10,
-    paddingVertical: 10,
-    borderRadius: 8,
+    marginTop: 12,
+    borderRadius: 12,
+    paddingVertical: 12,
     alignItems: 'center',
+    overflow: 'hidden',
   },
   journalButtonText: {
-    color: '#03363d',
-    fontWeight: 'bold',
+    color: '#ffffff',
+    fontWeight: '700',
     fontSize: 16,
   },
-
 });
